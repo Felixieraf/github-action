@@ -20,4 +20,17 @@ jobs:
     - name: Test with nose
       run: |
         pipenv run nosetests
+  review: 
+    needs: build
+    runs-on: ubuntu-lates
+    if: ${{ github.ref != 'refs/heads/master' }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+         pr_title: "Awesome PR by ${{ github.actor }}"
+         source_branch: ""
+         destination_branch: "master"
+         github_token: ${{ secrets.GITHUB_TOKEN }}
 
