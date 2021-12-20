@@ -22,7 +22,7 @@ jobs:
         pipenv run nosetests
   review: 
     needs: build
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     if: ${{ github.ref != 'refs/heads/master' }}
     steps:
     - uses: actions/checkout@v2
