@@ -1,0 +1,23 @@
+name: exercice1-workflow
+on: [push,pull]
+jobs:
+  builds:
+    runs-on: ubuntu-latest
+    steps:
+      -uses: actions/checkout@v2
+      -name: Set up python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      -name: Install dependencies
+       run: |
+          python -m pip install -upgrade pip
+          pip install pipenv
+          pipenv install -dev
+      -name: Linter app repertori
+       run: |
+          pip env run pylint app
+      -name: Test
+        run: |
+          pipenv run nosetests
+
