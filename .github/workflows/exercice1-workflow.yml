@@ -1,23 +1,36 @@
-name: exercice1-workflow
-on: [push,pull]
+name: exercise1-workflow
+on: [push,pull_request]
 jobs:
-  builds:
+  build:
     runs-on: ubuntu-latest
     steps:
-      -uses: actions/checkout@v2
-      -name: Set up python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      -name: Install dependencies
-       run: |
-          python -m pip install -upgrade pip
-          pip install pipenv
-          pipenv install -dev
-      -name: Linter app repertori
-       run: |
-          pip env run pylint app
-      -name: Test
-        run: |
-          pipenv run nosetests
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
+    - name: Lint with pylint
+      run: |
+        pipenv run pylint app
+    - name: Test with nose
+      run: |
+        pipenv run nosetests
+  review: 
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ github.ref != 'refs/heads/main' }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+         pr_title: "Awesome PR by ${{ github.actor }}"
+         source_branch: ""
+         destination_branch: "main"
+         github_token: ${{ secrets.GITHUB_TOKEN }}
 
