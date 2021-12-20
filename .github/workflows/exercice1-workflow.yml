@@ -23,7 +23,7 @@ jobs:
   review: 
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ github.ref != 'refs/heads/master' }}
+    if: ${{ github.ref != 'refs/heads/main' }}
     steps:
     - uses: actions/checkout@v2
     - name: pull-request
@@ -31,6 +31,6 @@ jobs:
       with:
          pr_title: "Awesome PR by ${{ github.actor }}"
          source_branch: ""
-         destination_branch: "master"
+         destination_branch: "main"
          github_token: ${{ secrets.GITHUB_TOKEN }}
 
